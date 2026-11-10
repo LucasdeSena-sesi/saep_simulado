@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechMaq - Autenticação</title>
+    <link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+    <div class="layout-wrapper">
+        <header class="main-header">
+            <div class="header-brand">
+                <div class="logo-icon"></div>
+                <div>
+                    <h1>TechMaq</h1>
+                    <p>Gestão Industrial de Manutenção</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content flex-center">
+            <div class="card auth-card">
+                <h2>Acesso ao Sistema</h2>
+                <p class="subtitle">Insira as suas credenciais para aceder ao painel.</p>
+
+                <div id="alert" class="alert hidden"></div>
+
+                <form id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" placeholder="exemplo@techmaq.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha">Palavra-passe</label>
+                        <input type="password" id="senha" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>Ainda não tem conta? <a href="cadastro.html">Registe-se aqui</a></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/app.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+
+            const res = App.login(email, senha);
+            if (res.success) {
+                window.location.href = 'painel.html';
+            } else {
+                App.showAlert(res.message, 'danger');
+            }
+        });
+    </script>
+</body>
+</html>

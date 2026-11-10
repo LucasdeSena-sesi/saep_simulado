@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechMaq - Painel de Chamados</title>
+    <link rel="stylesheet" href="assets/estilo.css">
+</head>
+<body>
+    <div class="layout-wrapper">
+        <header class="main-header navbar-between">
+            <div class="header-brand">
+                <div class="logo-icon"></div>
+                <div>
+                    <h1>TechMaq</h1>
+                    <p>Painel de Chamados de Manutenção</p>
+                </div>
+            </div>
+            <div class="user-menu">
+                <span id="userLogged" class="user-badge">Utilizador: ---</span>
+                <a href="abrir_chamado.html" class="btn btn-success btn-sm">+ Abrir Chamado</a>
+                <button onclick="App.logout()" class="btn btn-outline-danger btn-sm">Sair</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="card table-card">
+                <div class="card-header-flex">
+                    <div>
+                        <h2>Solicitações Registadas</h2>
+                        <p class="subtitle">Lista geral de chamados de manutenção e respetivos equipamentos.</p>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th># ID</th>
+                                <th>Equipamento</th>
+                                <th>Descrição do Problema</th>
+                                <th>Prioridade</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaChamados">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/app.js"></script>
+    <script>
+        const user = App.checkAuth();
+        document.getElementById('userLogged').innerText = ` ${user.nome}`;
+
+        const chamados = App.getChamadosWithJOIN();
+        const tbody = document.getElementById('tabelaChamados');
+
+        if (chamados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="empty-state">Nenhum chamado de manutenção registado até ao momento.</td></tr>`;
+        } else {
+            tbody.innerHTML = chamados.map(c => `
+                <tr>
+                    <td><strong>#${c.id}</strong></td>
+                    <td><strong>${c.equipamento_nome}</strong></td>
+                    <td>${c.descricao}</td>
+                    <td><span class="badge prioridade-${c.prioridade.toLowerCase()}">${c.prioridade}</span></td>
+                    <td><span class="badge status-aberto">${c.status}</span></td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
